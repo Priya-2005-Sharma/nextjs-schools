@@ -40,10 +40,10 @@
   border-radius: 8px;
   margin-bottom: 1rem;
 }
-imageWrapper {
-  position: relative;   /* required for next/image fill */
-  width: 100%;          /* takes full width of the card */
-  height: 180px;        /* same as your .image height */
+.imageWrapper {
+  position: relative;   
+  width: 100%;          
+  height: 180px;        
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 1rem;
