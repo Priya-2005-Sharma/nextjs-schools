@@ -17,7 +17,7 @@ export default function ShowSchools(){
             <div className={styles.grid}>
                 {schools.map((school)=>(
                     <div key={school.id} className={styles.card}>
-                        <img className={styles.image}
+                        <Image className={styles.image}
                        src={
                       school.image ? `/schoolImages/${school.image}` : "/default-img.jpg"
                         } 

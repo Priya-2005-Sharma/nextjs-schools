@@ -17,9 +17,12 @@
 /.next/
 /out/
 
+# Environment files (keep DB credentials safe)
+.env*
+
+
 # production
 /build
-utils/db.js
 
 # misc
 .DS_Store
@@ -31,8 +34,6 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
 
 # vercel
 .vercel
