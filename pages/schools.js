@@ -19,12 +19,14 @@ export default function ShowSchools(){
             <div className={styles.grid}>
                 {schools.map((school)=>(
                     <div key={school.id} className={styles.card}>
-                        <Image className={styles.image}
-                       src={
-                      school.image ? `/schoolImages/${school.image}` : "/default-img.jpg"
-                        } 
-                     alt={school.name}
-                     />
+                        <div className={styles.imageWrapper}>
+                      <Image
+                       src={school.image ? `/schoolImages/${school.image}` : "/default-img.jpg"}
+                      alt={school.name}
+                            fill
+                            style={{ objectFit: "cover" }}
+                            />
+                            </div>
 
 
                         <h2 className={styles.schoolName}>{school.name}</h2>
