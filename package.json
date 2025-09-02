@@ -1,6 +1,6 @@
 {
-  "engines":{
-    "node":"20.19.4"
+  "engines": {
+    "node": "20.19.4"
   },
   "name": "nextjs-schools",
   "version": "0.1.0",
@@ -15,6 +15,7 @@
     "formidable": "^3.5.4",
     "mysql2": "^3.14.4",
     "next": "15.5.2",
+    "pg": "^8.16.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0"

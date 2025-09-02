@@ -9,7 +9,7 @@ export default function ShowSchools(){
     useEffect(()=>{
         fetch("/api/getSchools")
         .then((res)=>res.json())
-        .then((data) => setSchools(data))
+        .then((data) => setSchools(Array.isArray(data) ? data : []))
         .catch((err)=>console.log(err));
     },[]);
 

@@ -17,28 +17,32 @@ export default async function handler(req, res) {
 
   const uploadDir = path.join(process.cwd(), "/public/schoolImages");
 
+  
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+
   const parseForm = (req) =>
     new Promise((resolve, reject) => {
       const form = formidable({
         multiples: false,
         uploadDir,
         keepExtensions: true,
+        maxFileSize: 5 * 1024 * 1024, // 5 MB
       });
 
       form.parse(req, async (err, fields, files) => {
         if (err) return reject(err);
+
         let imageFilename = null;
+        const imageFile = Array.isArray(files.image) ? files.image[0] : files.image;
 
-         const imageFile = Array.isArray(files.image) ? files.image[0] : files.image;
-
-          if (imageFile && (imageFile.originalFilename || imageFile.name)) {
+        if (imageFile && (imageFile.originalFilename || imageFile.name)) {
           const oldPath = imageFile.filepath || imageFile.path;
-          const originalName =
-            imageFile.originalFilename || imageFile.name;
-          
+          const originalName = imageFile.originalFilename || imageFile.name;
           const newFilename = Date.now() + "-" + originalName.replace(/\s/g, "_");
           const newPath = path.join(uploadDir, newFilename);
-        
+
           try {
             await fs.promises.rename(oldPath, newPath);
             imageFilename = newFilename;
@@ -46,20 +50,35 @@ export default async function handler(req, res) {
             return reject(renameErr);
           }
         }
-      else{
-        console.warn("No image uploaded or filename missing");
-      }
+
         resolve({ fields, imageFilename });
       });
     });
 
   try {
-    const { fields,imageFilename } = await parseForm(req);
+    const { fields, imageFilename } = await parseForm(req);
 
-    const { name, address, city, state, contact, email_id } = fields;
+    const name = fields.name?.[0] || fields.name;
+    const address = fields.address?.[0] || fields.address;
+    const city = fields.city?.[0] || fields.city;
+    const state = fields.state?.[0] || fields.state;
+    const contact = fields.contact?.[0] || fields.contact;
+    const email_id = fields.email_id?.[0] || fields.email_id;
 
+    
+    if (!name || !address || !city || !state || !contact || !email_id) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    if (!emailRegex.test(email_id)) {
+      return res.status(400).json({ error: "Invalid email address" });
+    }
+
+    
     await db.query(
-      "INSERT INTO schools (name, address, city, state, contact, image, email_id) VALUES (?,?,?,?,?,?,?)",
+      "INSERT INTO schools (name, address, city, state, contact, image, email_id) VALUES ($1,$2,$3,$4,$5,$6,$7)",
       [name, address, city, state, contact, imageFilename, email_id]
     );
 
