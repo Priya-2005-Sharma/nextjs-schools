@@ -1,5 +1,7 @@
 import {useEffect,useState} from "react";
 import styles from "../styles/schools.module.css";
+import Image from "next/image";
+
 
 export default function ShowSchools(){
     const [schools,setSchools]=useState([]);
